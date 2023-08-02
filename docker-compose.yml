@@ -23,5 +23,5 @@ services:
             context: .
             dockerfile: docker/Dockerfile
 
-            args:
-                USER: "${USER:-david-engelmann}"
+            #args:
+                #USER: "${USER:-david-engelmann}"
