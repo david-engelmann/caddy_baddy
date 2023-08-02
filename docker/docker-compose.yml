@@ -10,6 +10,8 @@ services:
         image: 'index.docker.io/caddy:2.7-alpine@sha256:57942bf7e71d78bc866cbc6c45f0563dbbea73efedac5e731b4b2cffa75e45b4'
         cpus: 2
         mem_limit: '4g'
+        working_dir: /app
+        user: root
         environment:
           - 'XDG_DATA_HOME=/caddy-storage/data'
           - 'XDG_CONFIG_HOME=/caddy-storage/config'
@@ -17,12 +19,7 @@ services:
 
         volumes:
           - 'caddy:/caddy-storage'
-
-
-
           - "/var/run/docker.sock:/var/run/docker.sock"
-
-
           - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
 
         ports:
