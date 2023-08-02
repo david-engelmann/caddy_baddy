@@ -1,0 +1,27 @@
+version: "3.8"
+
+networks:
+    sourcegraph:
+        name: sourcegraph
+        driver: bridge
+        ipam:
+            driver: default
+
+services:
+    test_caddy:
+        image: test_caddy
+        container_name: test_caddy
+        user: root
+        privileged: true
+        working_dir: /app
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+        networks:
+          - sourcegraph
+        command: ["sh", "-c", "pwd && ls -la && bash docker/scripts/docker_install.sh && test -f caddy/builtins/http.Caddyfile && echo true || echo false && docker compose -f docker/docker-compose.yml up"]
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+
+            args:
+                USER: "${USER:-david-engelmann}"
