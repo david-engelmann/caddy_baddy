@@ -16,9 +16,10 @@ services:
         working_dir: /app
         volumes:
           - "/var/run/docker.sock:/var/run/docker.sock"
+          - "./:/app"
         networks:
           - sourcegraph
-        command: ["sh", "-c", "pwd && ls -la && bash docker/scripts/docker_install.sh && test -f caddy/builtins/http.Caddyfile && echo true || echo false && docker compose -f docker/docker-compose.yml up"]
+        command: ["sh", "-c", "pwd && ls -la && bash docker/scripts/docker_install.sh && test -f caddy/builtins/http.Caddyfile && echo true || echo false && docker network ls && docker ps && chmod +x docker/docker-compose.yml && docker compose -f docker/docker-compose.yml up"]
         build:
             context: .
             dockerfile: docker/Dockerfile

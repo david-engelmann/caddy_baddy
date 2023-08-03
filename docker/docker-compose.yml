@@ -7,21 +7,29 @@ networks:
 
 services:
     caddy:
-        image: 'index.docker.io/caddy:2.7-alpine@sha256:57942bf7e71d78bc866cbc6c45f0563dbbea73efedac5e731b4b2cffa75e45b4'
-        cpus: 2
-        mem_limit: '4g'
+        # WORKS WITHOUT ISSUE
+        image: ubuntu
+
+        # FAILS
+        #image: 'index.docker.io/caddy:2.7-alpine@sha256:57942bf7e71d78bc866cbc6c45f0563dbbea73efedac5e731b4b2cffa75e45b4'
+        #cpus: 2
+        #mem_limit: '4g'
+
         working_dir: /app
         user: root
+        privileged: true
+        command: ["sh", "-c", "pwd && ls -la && sleep infinity"]
         environment:
           - 'XDG_DATA_HOME=/caddy-storage/data'
           - 'XDG_CONFIG_HOME=/caddy-storage/config'
           - 'SRC_FRONTEND_ADDRESSES=sourcegraph-frontend-0:3080'
-
         volumes:
           - 'caddy:/caddy-storage'
+          # PATH WORKS IN UBUNTU
+          - '../:/app'
           - "/var/run/docker.sock:/var/run/docker.sock"
+          # PATH WORKS IN UBUNTU
           - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
-
         ports:
           - '0.0.0.0:80:80'
           - '0.0.0.0:443:443'
